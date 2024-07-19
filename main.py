@@ -153,6 +153,10 @@ class Model(object):
         # _show_block() and _hide_block() calls
         self.queue = deque()
 
+        self.border = 0
+
+        self.border_blocks = {}
+
         self._initialize()
 
     def _initialize(self):
@@ -160,6 +164,7 @@ class Model(object):
 
         """
         n = 80  # 1/2 width and height of world
+        border = n
         s = 1  # step size
         y = 0  # initial y height
         for x in xrange(-n, n + 1, s):
@@ -247,6 +252,11 @@ class Model(object):
         if position in self.world:
             self.remove_block(position, immediate)
         self.world[position] = texture
+        #checking if the block is on the border
+        x, y, z = position
+        if x >= 80 or x <= -80 or y >= 80 or y <= -80:
+            self.border_blocks[position] = texture
+
         self.sectors.setdefault(sectorize(position), []).append(position)
         if immediate:
             if self.exposed(position):
@@ -579,6 +589,11 @@ class Window(pyglet.window.Window):
         dt = min(dt, 0.2)
         for _ in xrange(m):
             self._update(dt / m)
+
+        # Check and update z-axis if below -10
+        x, y, z = self.position
+        if y < -10:
+            self.position = (x, 0, z)
 
     def _update(self, dt):
         """ Private implementation of the `update()` method. This is where most
