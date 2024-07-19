@@ -254,7 +254,7 @@ class Model(object):
         self.world[position] = texture
         #checking if the block is on the border
         x, y, z = position
-        if x >= 80 or x <= -80 or y >= 80 or y <= -80:
+        if x >= self.border or x <= -self.border or y >= self.border or y <= -self.border:
             self.border_blocks[position] = texture
 
         self.sectors.setdefault(sectorize(position), []).append(position)
@@ -567,6 +567,21 @@ class Window(pyglet.window.Window):
             dx = 0.0
             dz = 0.0
         return (dx, dy, dz)
+    
+    def find_closest_block(self, character_position):
+        closest_block = None
+        min_distance = float('inf')
+        
+        for block_position in self.model.border_blocks:
+            x1, y1, z1 = character_position
+            x2, y2, z2 = block_position
+            distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+
+            if distance < min_distance:
+                min_distance = distance
+                closest_block = block_position
+
+        return closest_block
 
     def update(self, dt):
         """ This method is scheduled to be called repeatedly by the pyglet
@@ -590,10 +605,10 @@ class Window(pyglet.window.Window):
         for _ in xrange(m):
             self._update(dt / m)
 
-        # Check and update z-axis if below -10
+        # Check and update position to nearest block if y-axis is below -10
         x, y, z = self.position
         if y < -10:
-            self.position = (x, 0, z)
+            self.position = self.find_closest_block(self.position)
 
     def _update(self, dt):
         """ Private implementation of the `update()` method. This is where most
