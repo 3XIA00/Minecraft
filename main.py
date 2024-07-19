@@ -575,6 +575,8 @@ class Window(pyglet.window.Window):
         for block_position in self.model.border_blocks:
             x1, y1, z1 = character_position
             x2, y2, z2 = block_position
+            # do not compare y-axis otherwize it will always find the block on the buttom of the world
+            # instead of the block on the surface of the world
             distance = math.sqrt((x2 - x1)**2 + (z2 - z1)**2)
 
             if distance < min_distance:
