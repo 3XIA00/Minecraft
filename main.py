@@ -157,8 +157,6 @@ class Model(object):
 
         self.border_blocks = {}
 
-        self.character_height = 1.5
-
         self._initialize()
 
     def _initialize(self):
