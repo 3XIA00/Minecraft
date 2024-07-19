@@ -157,6 +157,8 @@ class Model(object):
 
         self.border_blocks = {}
 
+        self.character_height = 1.5
+
         self._initialize()
 
     def _initialize(self):
@@ -575,8 +577,9 @@ class Window(pyglet.window.Window):
         for block_position in self.model.border_blocks:
             x1, y1, z1 = character_position
             x2, y2, z2 = block_position
-            # in order to find block on surface, y-axis should not be compared
-            # if two blocks have same distance, the one with higher y value is closer to surface
+            # in order to find block on surface, y-axis should not be compared, because there is a wall on the border
+            # the cloest 3D distance between block and player only returns the block on the buttom
+            # but in this case we want to block on the top
             distance = math.sqrt((x2 - x1)**2 + (z2 - z1)**2)
 
             if distance < min_distance:
