@@ -571,15 +571,19 @@ class Window(pyglet.window.Window):
     def find_closest_block(self, character_position):
         closest_block = None
         min_distance = float('inf')
-        
+
         for block_position in self.model.border_blocks:
             x1, y1, z1 = character_position
             x2, y2, z2 = block_position
-            distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+            distance = math.sqrt((x2 - x1)**2 + (z2 - z1)**2)
 
             if distance < min_distance:
                 min_distance = distance
                 closest_block = block_position
+            elif distance == min_distance:
+                # If two blocks are equidistant, choose the one with the highest y-coordinate
+                if y2 > y1:
+                    closest_block = block_position
 
         return closest_block
 
