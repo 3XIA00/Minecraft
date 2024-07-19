@@ -568,7 +568,7 @@ class Window(pyglet.window.Window):
             dz = 0.0
         return (dx, dy, dz)
     
-    def find_closest_block(self, character_position):
+    def find_closest_border_block(self, character_position):
         closest_block = None
         min_distance = float('inf')
 
@@ -614,7 +614,7 @@ class Window(pyglet.window.Window):
         # Check and update position to nearest block if y-axis is below -10
         x, y, z = self.position
         if y < -10:
-            self.position = self.find_closest_block(self.position)
+            self.position = self.find_closest_border_block(self.position)
 
     def _update(self, dt):
         """ Private implementation of the `update()` method. This is where most
