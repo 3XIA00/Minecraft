@@ -568,15 +568,14 @@ class Window(pyglet.window.Window):
             dz = 0.0
         return (dx, dy, dz)
     
-    def find_closest_border_block(self, character_position):
+    def find_closest_surface_block(self, character_position):
         closest_block = None
         min_distance = float('inf')
 
         for block_position in self.model.border_blocks:
             x1, y1, z1 = character_position
             x2, y2, z2 = block_position
-            # do not compare y-axis otherwize it will always find the block on the buttom of the world
-            # instead of the block on the surface of the world
+            # in order to find block on surface, y-axis should not be compared
             distance = math.sqrt((x2 - x1)**2 + (z2 - z1)**2)
 
             if distance < min_distance:
@@ -614,7 +613,7 @@ class Window(pyglet.window.Window):
         # Check and update position to nearest block if y-axis is below -10
         x, y, z = self.position
         if y < -10:
-            self.position = self.find_closest_border_block(self.position)
+            self.position = self.find_closest_surface_block(self.position)
 
     def _update(self, dt):
         """ Private implementation of the `update()` method. This is where most
