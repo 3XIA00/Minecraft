@@ -612,10 +612,8 @@ class Window(pyglet.window.Window):
         for _ in xrange(m):
             self._update(dt / m)
 
-        # Check and update position to nearest block if y-axis is below -10
-        x, y, z = self.position
-        if y < -10:
-            self.position = self.find_closest_surface_block(self.position)
+        #todo: add code here so that character will be teleported back to surface once y is below -10
+
 
     def _update(self, dt):
         """ Private implementation of the `update()` method. This is where most
